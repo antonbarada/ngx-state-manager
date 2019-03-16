@@ -1,16 +1,29 @@
+import { HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
+import { StateManagerModule } from 'projects/ngx-state-manager/src/public_api';
 import { AppComponent } from './app.component';
+import { loadEmployee } from './load-user.initializer';
+import { StateManager } from './state-manager';
+import { AuthStateService } from './state-manager/auth.service';
+import { TodosStateService } from './state-manager/todos.service';
+import { UserNavComponent } from './user-nav/user-nav.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent, UserNavComponent],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    StateManagerModule.forRoot([AuthStateService, TodosStateService])
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: loadEmployee,
+      deps: [StateManager],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
