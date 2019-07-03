@@ -1,8 +1,8 @@
 import { State } from './state';
 
 export abstract class FeatureStateManager<T> {
-  protected state: State<T> = new State();
-  protected initialState: T;
+  protected readonly state: State<T> = new State();
+  protected readonly initialState: T;
 
   onInit() {
     this.setInitialState();

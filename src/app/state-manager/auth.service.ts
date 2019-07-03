@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  FeatureStateManager,
-  StateManagerEvents
-} from 'projects/ngx-state-manager/src/public_api';
+import { FeatureStateManager, StateManagerEvents } from 'projects/ngx-state-manager/src/public_api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';

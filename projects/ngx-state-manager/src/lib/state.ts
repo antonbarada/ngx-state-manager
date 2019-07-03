@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export class State<T> {
-  private state: { [K in keyof T]?: BehaviorSubject<T[K]> } = {};
+  private readonly state: { [K in keyof T]?: BehaviorSubject<T[K]> } = {};
 
   get<K extends keyof T>(key: K): Observable<T[K]> {
     if (!this.state[key]) {
