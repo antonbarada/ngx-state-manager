@@ -8,7 +8,7 @@ export class StateManagerEvents<V = StateEvent> extends Subject<V> {
     super();
   }
 
-  broadcast(value?: V): void {
-    this.next(value);
+  broadcast(event: V): void {
+    this.next(event);
   }
 }
