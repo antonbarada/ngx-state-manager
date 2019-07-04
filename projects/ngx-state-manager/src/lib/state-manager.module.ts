@@ -2,6 +2,7 @@ import { ModuleWithProviders, NgModule, Type } from '@angular/core';
 import { StateManagerEvents } from './events/events';
 import { ListenersSubscription } from './events/listeners-subscription';
 import { FeatureStateManager } from './feature-state-manager';
+import { StateManagerFeatureModule } from './state-manager-feature.module';
 import { StateManagerRootModule } from './state-manager-root.module';
 import { FEATURE_STATE_MANAGERS, ROOT_STATE_MANAGERS } from './tokens';
 
@@ -25,8 +26,9 @@ export class StateManagerModule {
 
   static forFeature(featureStateManagers: Type<any>[]): ModuleWithProviders {
     return {
-      ngModule: StateManagerRootModule,
+      ngModule: StateManagerFeatureModule,
       providers: [
+        StateManagerEvents,
         featureStateManagers,
         {
           provide: FEATURE_STATE_MANAGERS,
@@ -41,6 +43,6 @@ export class StateManagerModule {
 export function createManagerInstances(
   ...instances: FeatureStateManager<any>[]
 ) {
-  instances.forEach(i => i.onInit());
+  instances.forEach(i => typeof i.onInit === 'function' ? i.onInit() : void 0);
   return instances;
 }
