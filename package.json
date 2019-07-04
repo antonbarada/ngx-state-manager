@@ -4,12 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "prebuild": "rimraf ./dist",
+    "build": "ng build --project NgxStateManager",
+    "postbuild": "cpy ngx-state-manager-package.json ./dist/ngx-state-manager --rename=package.json && cpy LICENSE README.md ./dist/ngx-state-manager",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "release": "npm run build && cd ./dist/ngx-state-manager && npm publish"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~8.1.0",
     "@angular/common": "~8.1.0",
@@ -32,6 +34,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.1",
+    "cpy-cli": "^2.0.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
@@ -41,9 +44,20 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng-packagr": "^5.1.0",
     "protractor": "~5.4.0",
+    "rimraf": "^2.6.3",
     "ts-node": "~7.0.0",
     "tsickle": "^0.35.0",
     "tslint": "~5.11.0",
     "typescript": "~3.4.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebarada/ngx-state-manager.git"
+  },
+  "homepage": "https://github.com/thebarada/ngx-state-manager#readme",
+  "bugs": {
+    "url": "https://github.com/thebarada/ngx-state-manager/issues"
+  },
+  "author": "Anton Barada",
+  "license": "MIT"
 }

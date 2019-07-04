@@ -1,0 +1,31 @@
+{
+  "name": "ngx-state-manager",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": "~8.1.0",
+    "@angular/core": "~8.1.0"
+  },
+  "main": "bundles/ngx-state-manager.umd.js",
+  "module": "fesm5/ngx-state-manager.js",
+  "es2015": "fesm2015/ngx-state-manager.js",
+  "esm5": "esm5/ngx-state-manager.js",
+  "esm2015": "esm2015/ngx-state-manager.js",
+  "fesm5": "fesm5/ngx-state-manager.js",
+  "fesm2015": "fesm2015/ngx-state-manager.js",
+  "typings": "ngx-state-manager.d.ts",
+  "metadata": "ngx-state-manager.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebarada/ngx-state-manager.git"
+  },
+  "homepage": "https://github.com/thebarada/ngx-state-manager#readme",
+  "bugs": {
+    "url": "https://github.com/thebarada/ngx-state-manager/issues"
+  },
+  "author": "Anton Barada",
+  "license": "MIT"
+}
