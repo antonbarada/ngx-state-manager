@@ -1,9 +1,19 @@
 {
   "name": "ngx-state-manager",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",
     "tslib": "^1.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebarada/ngx-state-manager.git"
+  },
+  "homepage": "https://github.com/thebarada/ngx-state-manager#readme",
+  "bugs": {
+    "url": "https://github.com/thebarada/ngx-state-manager/issues"
+  },
+  "author": "Anton Barada",
+  "license": "MIT"
 }

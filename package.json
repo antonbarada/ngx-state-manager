@@ -5,12 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "prebuild": "rimraf ./dist",
-    "build": "ng build --project NgxStateManager",
-    "postbuild": "cpy ngx-state-manager-package.json ./dist/ngx-state-manager --rename=package.json && cpy LICENSE README.md ./dist/ngx-state-manager",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "release": "npm run build && cd ./dist/ngx-state-manager && npm publish"
+    "release": "ng build ngx-state-manager-lib --prod && cpy LICENSE README.md ./dist/ngx-state-manager && cd ./dist/ngx-state-manager && npm publish"
   },
   "dependencies": {
     "@angular/animations": "~9.1.0",
