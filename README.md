@@ -19,7 +19,7 @@ Simple state manager based on Angular services.
 
 ## Prerequisites
 
-This package depends on Angular `v8.0.0`.
+This package depends on Angular `v9.0.0`.
 
 ## Getting started
 
@@ -33,8 +33,8 @@ npm install ngx-state-manager --save
 
 ### Create state service
 
-Define your state **IState** and create **TodosStateService** that will extends abstract class **FeatureStateManager**.
-The main thing provided by **FeatureStateManager** is state instance by wich we manipulate with state shanges.
+Define your state **IState** and create **TodosStateService** extended from abstract class **FeatureStateManager**.
+The main thing provided by **FeatureStateManager** is state instance by wich we're gonna manipulate with state changes.
 You could also define initial state (optionaly), otherwise all inital values will be `null`:
 
 ```ts
@@ -50,20 +50,22 @@ interface IState {
   loaded: boolean;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class TodosStateService extends FeatureStateManager<IState> {
   initialState: IState = {
     todos: [],
     loaded: false
   };
 
-  constructor(private api: ApiService) {
+  constructor(private http: HttpClient) {
     super();
   }
 
   getTodos(): Observable<Todo[]> {
     if (!this.state.getValue('loaded')) {
-      this.api.todos.getAll().subscribe(todos => {
+      this.http.get(GET_TODOS_URL).subscribe(todos => {
         this.state.set('todos', todos);
         this.state.set('loaded', true);
       });
@@ -176,12 +178,21 @@ You can isolate states and events within particular module using `forFeature` me
 
 ```ts
 @NgModule({
-  imports: [BrowserModule, StateManagerModule.forFeature([FeatureStateService])]
+  imports: [
+    BrowserModule,
+    StateManagerModule.forFeature([FeatureStateService])
+  ],
+  providers: [FeatureStateService]
 })
 export class MyFeatureModule {}
 ```
 
 ## API
+
+`FeatureStateManager` has following methods:
+
+- `getState(key: string): Observable<any>` get observable of value from state by key
+- `getStateValue(key: string): any` get current value from state by value (not observable)
 
 `State` has following methods:
 
