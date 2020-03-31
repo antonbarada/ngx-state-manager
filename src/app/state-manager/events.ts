@@ -1,4 +1,4 @@
-import { StateEvent } from 'projects/ngx-state-manager/src/public_api';
+import { StateEvent } from 'ngx-state-manager';
 
 export class LogoutEvent implements StateEvent {
   readonly type = 'LogoutEvent';

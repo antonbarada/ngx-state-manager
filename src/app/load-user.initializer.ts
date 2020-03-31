@@ -1,10 +1,8 @@
-import { find } from 'rxjs/operators';
+import { find, mapTo } from 'rxjs/operators';
 import { StateManager } from './state-manager';
 import { loggedInKey } from './state-manager/auth.service';
 
-export function loadEmployee(
-  stateManager: StateManager
-): () => Promise<boolean> {
+export function loadEmployee(stateManager: StateManager): () => Promise<boolean> {
   return () => {
     const loggedInUsername = localStorage.getItem(loggedInKey);
     if (!loggedInUsername) {
@@ -12,7 +10,10 @@ export function loadEmployee(
     }
     return stateManager.auth
       .getAuthenticated()
-      .pipe(find(Boolean))
+      .pipe(
+        find(value => !!value),
+        mapTo(true)
+      )
       .toPromise();
   };
 }

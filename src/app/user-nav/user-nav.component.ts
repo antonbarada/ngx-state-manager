@@ -9,10 +9,8 @@ import { StateManager } from '../state-manager';
   styleUrls: ['./user-nav.component.css']
 })
 export class UserNavComponent {
-  isAuthenticated$: Observable<
-    boolean
-  > = this.stateManager.auth.getAuthentication();
-  user$: Observable<User> = this.stateManager.auth.getUser();
+  isAuthenticated$: Observable<boolean> = this.stateManager.auth.getAuthentication();
+  user$: Observable<User> = this.stateManager.auth.getState('user');
 
   constructor(private stateManager: StateManager) {}
 

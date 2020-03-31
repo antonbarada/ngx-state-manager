@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { FeatureStateManager, StateManagerEvents } from 'projects/ngx-state-manager/src/public_api';
+import { FeatureStateManager, StateManagerEvents } from 'ngx-state-manager';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from '../api/api.service';
 import { User } from '../models';
+import { UserService } from '../user.service';
 import { LogoutEvent } from './events';
 
 export const loggedInKey = 'loggedIn';
@@ -22,16 +22,12 @@ export class AuthStateService extends FeatureStateManager<IState> {
     isAuthenticated: false
   };
 
-  constructor(private api: ApiService, private events$: StateManagerEvents) {
+  constructor(private userApi: UserService, private events$: StateManagerEvents) {
     super();
   }
 
   getAuthentication(): Observable<boolean> {
-    return this.state.get('user').pipe(map(Boolean));
-  }
-
-  getUser(): Observable<User> {
-    return this.state.get('user');
+    return this.state.get('user').pipe(map(user => !!user));
   }
 
   login(username: string): void {
@@ -53,7 +49,7 @@ export class AuthStateService extends FeatureStateManager<IState> {
   }
 
   private fetchUser(username: string) {
-    this.api.user.getUser().subscribe({
+    this.userApi.getUser().subscribe({
       next: user => {
         this.state.set('user', user);
         localStorage.setItem(loggedInKey, username);

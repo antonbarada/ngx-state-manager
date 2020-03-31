@@ -1,0 +1,6 @@
+<div *ngIf="stateManager.auth.getAuthentication() | async">
+  Todos
+  <ul>
+    <li *ngFor="let todo of todosState.getTodos() | async">#{{ todo.id }} - {{ todo.title }}</li>
+  </ul>
+</div>
