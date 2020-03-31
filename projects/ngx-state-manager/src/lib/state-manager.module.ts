@@ -8,7 +8,7 @@ import { FEATURE_STATE_MANAGERS, ROOT_STATE_MANAGERS } from './tokens';
 
 @NgModule({})
 export class StateManagerModule {
-  static forRoot(rootStateManagers: Type<any>[]): ModuleWithProviders {
+  static forRoot(rootStateManagers: Type<any>[]): ModuleWithProviders<StateManagerRootModule> {
     return {
       ngModule: StateManagerRootModule,
       providers: [
@@ -24,7 +24,7 @@ export class StateManagerModule {
     };
   }
 
-  static forFeature(featureStateManagers: Type<any>[]): ModuleWithProviders {
+  static forFeature(featureStateManagers: Type<any>[]): ModuleWithProviders<StateManagerFeatureModule> {
     return {
       ngModule: StateManagerFeatureModule,
       providers: [
