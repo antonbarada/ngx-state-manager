@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { State } from './state';
 
 export abstract class FeatureStateManager<T> {
@@ -6,6 +7,14 @@ export abstract class FeatureStateManager<T> {
 
   onInit() {
     this.setInitialState();
+  }
+
+  getState<K extends keyof T>(key: K): Observable<T[K]> {
+    return this.state.get(key);
+  }
+
+  getStateValue<K extends keyof T>(key: K): T[K] {
+    return this.state.getValue(key);
   }
 
   private setInitialState() {
