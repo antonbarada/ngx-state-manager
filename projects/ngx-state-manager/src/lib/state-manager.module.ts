@@ -14,7 +14,6 @@ export class StateManagerModule {
       providers: [
         StateManagerEvents,
         ListenersSubscription,
-        rootStateManagers,
         {
           provide: ROOT_STATE_MANAGERS,
           deps: rootStateManagers,
@@ -29,7 +28,6 @@ export class StateManagerModule {
       ngModule: StateManagerFeatureModule,
       providers: [
         StateManagerEvents,
-        featureStateManagers,
         {
           provide: FEATURE_STATE_MANAGERS,
           deps: featureStateManagers,
@@ -40,9 +38,7 @@ export class StateManagerModule {
   }
 }
 
-export function createManagerInstances(
-  ...instances: FeatureStateManager<any>[]
-) {
-  instances.forEach(i => typeof i.onInit === 'function' ? i.onInit() : void 0);
+export function createManagerInstances(...instances: FeatureStateManager<any>[]) {
+  instances.forEach(i => (typeof i.onInit === 'function' ? i.onInit() : void 0));
   return instances;
 }
