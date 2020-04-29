@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/ngx-state-manager.svg)](https://badge.fury.io/js/ngx-state-manager) [![npm downloads](https://img.shields.io/npm/dm/ngx-state-manager.svg)](https://www.npmjs.com/package/ngx-state-manager)
 
-Simple state manager based on Angular services.
+Straightforward state manager based on Angular services.
 
 ## Table of contents:
 
