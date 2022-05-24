@@ -34,9 +34,21 @@
             "tsConfig": "projects/ngx-state-manager/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-state-manager/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ngx-state-manager/**/*.ts",
+              "projects/ngx-state-manager/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "ngx-state-manager"
+  "defaultProject": "ngx-state-manager",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
