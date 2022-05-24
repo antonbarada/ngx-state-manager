@@ -22,7 +22,7 @@ export class ListenersSubscription extends Subscription implements OnDestroy {
 
   addStateManager(stateManager: FeatureStateManager<any>) {
     const listeners = getListenerMetadata(stateManager);
-    if (!listeners || !listeners.length) {
+    if (!listeners?.length) {
       return;
     }
     listeners.forEach(({ methodName, type }) => {

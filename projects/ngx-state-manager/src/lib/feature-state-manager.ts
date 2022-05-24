@@ -9,11 +9,11 @@ export abstract class FeatureStateManager<T extends object> {
     this.setInitialState();
   }
 
-  getState<K extends keyof T>(key: K): Observable<T[K] | null> {
+  getState<K extends keyof T>(key: K): Observable<T[K]> {
     return this.state.get(key);
   }
 
-  getStateValue<K extends keyof T>(key: K): T[K] | null {
+  getStateValue<K extends keyof T>(key: K): T[K] {
     return this.state.getValue(key);
   }
 
