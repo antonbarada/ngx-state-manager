@@ -8,7 +8,9 @@ import { FEATURE_STATE_MANAGERS, ROOT_STATE_MANAGERS } from './tokens';
 
 @NgModule({})
 export class StateManagerModule {
-  static forRoot(rootStateManagers: Type<any>[]): ModuleWithProviders<StateManagerRootModule> {
+  static forRoot(
+    rootStateManagers: Type<any>[]
+  ): ModuleWithProviders<StateManagerRootModule> {
     return {
       ngModule: StateManagerRootModule,
       providers: [
@@ -17,13 +19,15 @@ export class StateManagerModule {
         {
           provide: ROOT_STATE_MANAGERS,
           deps: rootStateManagers,
-          useFactory: createManagerInstances
-        }
-      ]
+          useFactory: createManagerInstances,
+        },
+      ],
     };
   }
 
-  static forFeature(featureStateManagers: Type<any>[]): ModuleWithProviders<StateManagerFeatureModule> {
+  static forFeature(
+    featureStateManagers: Type<any>[]
+  ): ModuleWithProviders<StateManagerFeatureModule> {
     return {
       ngModule: StateManagerFeatureModule,
       providers: [
@@ -31,14 +35,18 @@ export class StateManagerModule {
         {
           provide: FEATURE_STATE_MANAGERS,
           deps: featureStateManagers,
-          useFactory: createManagerInstances
-        }
-      ]
+          useFactory: createManagerInstances,
+        },
+      ],
     };
   }
 }
 
-export function createManagerInstances(...instances: FeatureStateManager<any>[]) {
-  instances.forEach(i => (typeof i.onInit === 'function' ? i.onInit() : void 0));
+export function createManagerInstances(
+  ...instances: FeatureStateManager<any>[]
+) {
+  instances.forEach(i =>
+    typeof i.onInit === 'function' ? i.onInit() : void 0
+  );
   return instances;
 }

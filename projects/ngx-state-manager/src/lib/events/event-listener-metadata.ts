@@ -26,8 +26,8 @@ function setListenerMetadataEntries<T extends Type<FeatureStateManager<any>>>(
   )
     ? (constructor as any)[METADATA_KEY]
     : Object.defineProperty(constructor as any, METADATA_KEY, { value: [] })[
-      METADATA_KEY
-    ];
+        METADATA_KEY
+      ];
   if (
     meta.some(lm =>
       entries.some(e => lm.methodName === e.methodName || lm.type === e.type)
@@ -39,7 +39,10 @@ function setListenerMetadataEntries<T extends Type<FeatureStateManager<any>>>(
 }
 
 export function ListenEvent<T extends Type<any>>(type: T): PropertyDecorator {
-  return function <F extends Type<FeatureStateManager<any>>>(target: F, methodName: string) {
+  return function <F extends Type<FeatureStateManager<any>>>(
+    target: F,
+    methodName: string
+  ) {
     const metadata: ListenerMetadata<T> = { methodName, type };
     setListenerMetadataEntries(target, [metadata]);
   } as (target: {}, propertyName: string | symbol) => void;
