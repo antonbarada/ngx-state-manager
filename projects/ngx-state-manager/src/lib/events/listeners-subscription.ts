@@ -28,7 +28,7 @@ export class ListenersSubscription extends Subscription implements OnDestroy {
     listeners.forEach(({ methodName, type }) => {
       const sub = this.events$
         .pipe(filter(e => e instanceof type))
-        .subscribe(e => stateManager[methodName](e.payload));
+        .subscribe(e => (stateManager as any)[methodName](e.payload));
 
       this.add(sub);
     });

@@ -1,19 +1,19 @@
 import { Observable } from 'rxjs';
 import { State } from './state';
 
-export abstract class FeatureStateManager<T> {
+export abstract class FeatureStateManager<T extends object> {
   protected readonly state: State<T> = new State();
-  protected readonly initialState: T;
+  protected readonly initialState!: T;
 
   onInit() {
     this.setInitialState();
   }
 
-  getState<K extends keyof T>(key: K): Observable<T[K]> {
+  getState<K extends keyof T>(key: K): Observable<T[K] | null> {
     return this.state.get(key);
   }
 
-  getStateValue<K extends keyof T>(key: K): T[K] {
+  getStateValue<K extends keyof T>(key: K): T[K] | null {
     return this.state.getValue(key);
   }
 
