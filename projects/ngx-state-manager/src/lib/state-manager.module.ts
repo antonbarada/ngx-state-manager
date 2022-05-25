@@ -18,7 +18,8 @@ export class StateManagerModule {
         ListenersSubscription,
         {
           provide: ROOT_STATE_MANAGERS,
-          useValue: rootStateManagers,
+          useFactory: (...instances: FeatureStateManager<any>[]) => instances,
+          deps: rootStateManagers,
         },
       ],
     };
@@ -33,7 +34,8 @@ export class StateManagerModule {
         StateManagerEvents,
         {
           provide: FEATURE_STATE_MANAGERS,
-          useValue: featureStateManagers,
+          useFactory: (...instances: FeatureStateManager<any>[]) => instances,
+          deps: featureStateManagers,
         },
       ],
     };
