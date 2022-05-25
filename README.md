@@ -19,7 +19,7 @@ Simple state manager based on Angular services.
 
 ## Prerequisites
 
-This package depends on Angular `v9.0.0`.
+This package depends on Angular `v13.0.0`.
 
 ## Getting started
 
@@ -35,7 +35,7 @@ npm install ngx-state-manager --save
 
 Define your state **IState** and create **TodosStateService** extended from abstract class **FeatureStateManager**.
 The main thing provided by **FeatureStateManager** is state instance by wich we're gonna manipulate with state changes.
-You could also define initial state (optionaly), otherwise all inital values will be `null`:
+You have to define initial state in super method:
 
 ```ts
 interface Todo {
@@ -51,16 +51,14 @@ interface IState {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TodosStateService extends FeatureStateManager<IState> {
-  initialState: IState = {
-    todos: [],
-    loaded: false
-  };
-
   constructor(private http: HttpClient) {
-    super();
+    super({
+      todos: [],
+      loaded: false,
+    });
   }
 
   getTodos(): Observable<Todo[]> {
@@ -83,18 +81,18 @@ Add **TodosStateService** to your app module using **StateManagerModule**:
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, StateManagerModule.forRoot([TodosStateService])],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
 
-### state-manager.ts
+### state-manager.service.ts
 
 For your convenience create **StateManager** that gonna include all state services:
 
 ```ts
 @Injectable({ providedIn: 'root' })
-export class StateManager {
+export class StateManagerService {
   constructor(
     public todos: TodosStateService,
     public auth: AuthStateService,
@@ -111,7 +109,7 @@ Now you can use **StateManager** in app component:
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   todos$: Observable<Todo[]> = this.stateManager.todos.getTodos();
@@ -180,9 +178,9 @@ You can isolate states and events within particular module using `forFeature` me
 @NgModule({
   imports: [
     BrowserModule,
-    StateManagerModule.forFeature([FeatureStateService])
+    StateManagerModule.forFeature([FeatureStateService]),
   ],
-  providers: [FeatureStateService]
+  providers: [FeatureStateService],
 })
 export class MyFeatureModule {}
 ```
