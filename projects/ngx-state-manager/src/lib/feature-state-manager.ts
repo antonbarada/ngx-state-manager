@@ -1,12 +1,11 @@
 import { Observable } from 'rxjs';
-import { State } from './state';
+import { State, IState } from './state';
 
-export abstract class FeatureStateManager<T extends object> {
-  protected readonly state: State<T> = new State();
-  protected readonly initialState!: T;
+export abstract class FeatureStateManager<T extends IState> {
+  protected readonly state!: State<T>;
 
-  onInit() {
-    this.setInitialState();
+  constructor(initialState: T) {
+    this.state = new State(initialState);
   }
 
   getState<K extends keyof T>(key: K): Observable<T[K]> {
@@ -15,15 +14,5 @@ export abstract class FeatureStateManager<T extends object> {
 
   getStateValue<K extends keyof T>(key: K): T[K] {
     return this.state.getValue(key);
-  }
-
-  private setInitialState() {
-    if (this.initialState) {
-      for (const key in this.initialState) {
-        if (this.initialState.hasOwnProperty(key)) {
-          this.state.set(key, this.initialState[key]);
-        }
-      }
-    }
   }
 }

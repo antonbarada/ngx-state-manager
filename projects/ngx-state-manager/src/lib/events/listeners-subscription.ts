@@ -10,7 +10,7 @@ export class ListenersSubscription extends Subscription implements OnDestroy {
   constructor(
     @Optional()
     @SkipSelf()
-    public parent: ListenersSubscription,
+    parent: ListenersSubscription,
     private events$: StateManagerEvents
   ) {
     super();

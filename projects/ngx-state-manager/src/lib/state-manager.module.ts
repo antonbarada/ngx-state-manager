@@ -18,8 +18,7 @@ export class StateManagerModule {
         ListenersSubscription,
         {
           provide: ROOT_STATE_MANAGERS,
-          deps: rootStateManagers,
-          useFactory: createManagerInstances,
+          useValue: rootStateManagers,
         },
       ],
     };
@@ -34,19 +33,9 @@ export class StateManagerModule {
         StateManagerEvents,
         {
           provide: FEATURE_STATE_MANAGERS,
-          deps: featureStateManagers,
-          useFactory: createManagerInstances,
+          useValue: featureStateManagers,
         },
       ],
     };
   }
-}
-
-export function createManagerInstances(
-  ...instances: FeatureStateManager<any>[]
-) {
-  instances.forEach(i =>
-    typeof i.onInit === 'function' ? i.onInit() : void 0
-  );
-  return instances;
 }
