@@ -12,18 +12,13 @@ export type StateObject<T> = {
 };
 
 export class State<T extends IState> {
+  private readonly initialState: T;
   private readonly state: StateObject<T>;
 
   constructor(initialState: T) {
+    this.initialState = initialState;
     this.state = {} as StateObject<T>;
-    for (const key in initialState) {
-      if (initialState.hasOwnProperty(key)) {
-        this.state[key] = {
-          isValueSet: true,
-          subject: new BehaviorSubject(initialState[key]),
-        };
-      }
-    }
+    this.setInitialValues();
   }
 
   get<K extends keyof T>(key: K): Observable<T[K]> {
@@ -57,5 +52,21 @@ export class State<T extends IState> {
       return undefined as T[K];
     }
     return this.state[key].subject.getValue();
+  }
+
+  setInitialValues({ resetValues } = { resetValues: false }) {
+    for (const key in this.initialState) {
+      if (this.initialState.hasOwnProperty(key)) {
+        if (!this.state[key]) {
+          this.state[key] = {
+            isValueSet: true,
+            subject: new BehaviorSubject(this.initialState[key]),
+          };
+        } else {
+          this.state[key].isValueSet = resetValues ? false : this.state[key].isValueSet;
+          this.state[key].subject.next(this.initialState[key]);
+        }
+      }
+    }
   }
 }
