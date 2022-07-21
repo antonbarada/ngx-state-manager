@@ -1,27 +1,72 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, skip } from 'rxjs';
 
-export class State<T> {
-  private readonly state: { [K in keyof T]?: BehaviorSubject<T[K]> } = {};
+export interface IState {
+  [K: string]: any;
+}
+
+export type StateObject<T> = {
+  [K in keyof T]: {
+    isValueSet: boolean;
+    subject: BehaviorSubject<T[K]>;
+  };
+};
+
+export class State<T extends IState> {
+  private readonly initialState: T;
+  private readonly state: StateObject<T>;
+
+  constructor(initialState: T) {
+    this.initialState = initialState;
+    this.state = {} as StateObject<T>;
+    this.setInitialValues();
+  }
 
   get<K extends keyof T>(key: K): Observable<T[K]> {
     if (!this.state[key]) {
-      this.set(key, null);
+      this.state[key] = {
+        isValueSet: false,
+        subject: new BehaviorSubject(undefined as T[K]),
+      };
     }
-    return this.state[key].asObservable();
+    const observable = this.state[key].subject.asObservable();
+    if (!this.state[key].isValueSet) {
+      return observable.pipe(skip(1));
+    }
+    return observable;
   }
 
   set<K extends keyof T>(key: K, value: T[K]): void {
     if (!this.state[key]) {
-      this.state[key] = new BehaviorSubject(value);
+      this.state[key] = {
+        isValueSet: true,
+        subject: new BehaviorSubject(value),
+      };
       return;
     }
-    this.state[key].next(value);
+    this.state[key].isValueSet = true;
+    this.state[key].subject.next(value);
   }
 
   getValue<K extends keyof T>(key: K): T[K] {
     if (!this.state[key]) {
-      return null;
+      return undefined as T[K];
     }
-    return this.state[key].getValue();
+    return this.state[key].subject.getValue();
+  }
+
+  setInitialValues({ resetValues } = { resetValues: false }) {
+    for (const key in this.initialState) {
+      if (this.initialState.hasOwnProperty(key)) {
+        if (!this.state[key]) {
+          this.state[key] = {
+            isValueSet: true,
+            subject: new BehaviorSubject(this.initialState[key]),
+          };
+        } else {
+          this.state[key].isValueSet = resetValues ? false : this.state[key].isValueSet;
+          this.state[key].subject.next(this.initialState[key]);
+        }
+      }
+    }
   }
 }

@@ -10,7 +10,7 @@ export class ListenersSubscription extends Subscription implements OnDestroy {
   constructor(
     @Optional()
     @SkipSelf()
-    public parent: ListenersSubscription,
+    parent: ListenersSubscription,
     private events$: StateManagerEvents
   ) {
     super();
@@ -22,13 +22,13 @@ export class ListenersSubscription extends Subscription implements OnDestroy {
 
   addStateManager(stateManager: FeatureStateManager<any>) {
     const listeners = getListenerMetadata(stateManager);
-    if (!listeners || !listeners.length) {
+    if (!listeners?.length) {
       return;
     }
     listeners.forEach(({ methodName, type }) => {
       const sub = this.events$
         .pipe(filter(e => e instanceof type))
-        .subscribe(e => stateManager[methodName](e.payload));
+        .subscribe(e => (stateManager as any)[methodName](e.payload));
 
       this.add(sub);
     });

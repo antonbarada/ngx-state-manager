@@ -1,49 +1,53 @@
-const METADATA_KEY = '__state-manager/events__';
+import { Type } from '@angular/core';
+import { FeatureStateManager } from '../feature-state-manager';
 
-interface ListenerMetadata<T> {
-  methodName: string;
-  type: any;
+const METADATA_KEY = Symbol('state-manager: Event Listeners');
+
+interface ListenerMetadata<T = Type<any>> {
+  methodName: string | symbol;
+  type: T;
 }
 
-function getEffectMetadataEntries<T>(
-  sourceProto: T
-): Array<ListenerMetadata<T>> {
-  return sourceProto.constructor.hasOwnProperty(METADATA_KEY)
-    ? (sourceProto.constructor as any)[METADATA_KEY]
-    : [];
+function getListenerMetadataEntries(
+  featureStateManager: FeatureStateManager<any>
+): ListenerMetadata[] {
+  const ctor = featureStateManager.constructor as Function & {
+    [METADATA_KEY]: ListenerMetadata[];
+  };
+  return ctor.hasOwnProperty(METADATA_KEY) ? ctor[METADATA_KEY] : [];
 }
 
-function setListenerMetadataEntries<T>(
-  sourceProto: T,
-  entries: Array<ListenerMetadata<T>>
+function setListenerMetadataEntries(
+  featureStateManagerClass: Object,
+  listenerMetadata: ListenerMetadata
 ) {
-  const constructor = sourceProto.constructor;
-  const meta: Array<ListenerMetadata<T>> = constructor.hasOwnProperty(
-    METADATA_KEY
-  )
-    ? (constructor as any)[METADATA_KEY]
-    : Object.defineProperty(constructor, METADATA_KEY, { value: [] })[
-    METADATA_KEY
-    ];
+  const ctor = featureStateManagerClass.constructor as Function & {
+    [METADATA_KEY]: ListenerMetadata[];
+  };
+  const metadataEntries: ListenerMetadata[] = ctor.hasOwnProperty(METADATA_KEY)
+    ? ctor[METADATA_KEY]
+    : Object.defineProperty(ctor, METADATA_KEY, { value: [] })[METADATA_KEY];
   if (
-    meta.some(lm =>
-      entries.some(e => lm.methodName === e.methodName || lm.type === e.type)
+    metadataEntries.some(
+      ({ methodName, type }) =>
+        methodName === listenerMetadata.methodName ||
+        type === listenerMetadata.type
     )
   ) {
     return;
   }
-  Array.prototype.push.apply(meta, entries);
+  metadataEntries.push(listenerMetadata);
 }
 
-export function ListenEvent<T>(type: any): PropertyDecorator {
-  return function (target: T, methodName: string) {
+export function ListenEvent<T extends Type<any>>(type: T): MethodDecorator {
+  return function (target: Object, methodName: string | symbol) {
     const metadata: ListenerMetadata<T> = { methodName, type };
-    setListenerMetadataEntries<T>(target, [metadata]);
-  } as (target: {}, propertyName: string | symbol) => void;
+    setListenerMetadataEntries(target, metadata);
+  };
 }
 
-export function getListenerMetadata<T>(
-  instance: T
-): Array<ListenerMetadata<T>> {
-  return getEffectMetadataEntries(instance);
+export function getListenerMetadata(
+  featureStateManager: FeatureStateManager<any>
+): Array<ListenerMetadata<Type<any>>> {
+  return getListenerMetadataEntries(featureStateManager);
 }
