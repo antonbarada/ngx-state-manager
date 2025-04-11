@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration ivy",
     "test": "ng test",
-    "release": "ng build ngx-state-manager --prod && cpy LICENSE README.md ./dist/ngx-state-manager && cd ./dist/ngx-state-manager && npm publish",
+    "release": "ng build ngx-state-manager --prod && cp LICENSE README.md ./dist/ngx-state-manager && cd ./dist/ngx-state-manager && npm publish",
     "lint": "ng lint"
   },
   "dependencies": {
